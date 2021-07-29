@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 import sys, os
 import wave, math, contextlib
 import speech_recognition as sr
@@ -7,8 +8,8 @@ from moviepy.editor import AudioFileClip
 VIDEO_FILE_DIR = "VideoInput"
 TEXT_FILE_DIR = "TextOutput"
 AUDIO_FILE_DIR = "ConvertedAudio"
-CHUNK_SIZE = 60
-TEXT_SEPERATOR = "\n"
+CHUNK_SIZE = 20
+TEXT_SEPERATOR = " "
 
 
 def convert_video_to_audio(input_file, output_file):
@@ -26,13 +27,16 @@ def convert_audio_to_text(input_file_name, output_file, separator=TEXT_SEPERATOR
 
     recognizer = sr.Recognizer()
     
+    print('totalduration: ',total_duration)
     with alive_bar(total_duration) as bar:
-        for i in range(total_duration):
+        for i in range(0,total_duration):
             with sr.AudioFile(input_file_name) as source:
                 audio = recognizer.record(source, offset=i*CHUNK_SIZE, duration=CHUNK_SIZE)
             f = open(output_file, "a")
-            f.write(recognizer.recognize_google(audio))
+            transcribed_chunk = recognizer.recognize_google(audio)
+            f.write(transcribed_chunk)
             f.write(separator)
+            # print(' >>>> ', transcribed_chunk)
             bar()
         f.close()
 
