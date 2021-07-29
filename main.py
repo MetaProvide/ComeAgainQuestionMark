@@ -8,7 +8,7 @@ from moviepy.editor import AudioFileClip
 VIDEO_FILE_DIR = "VideoInput"
 TEXT_FILE_DIR = "TextOutput"
 AUDIO_FILE_DIR = "ConvertedAudio"
-CHUNK_SIZE = 20
+CHUNK_SIZE = 10
 TEXT_SEPERATOR = " "
 
 
@@ -27,26 +27,30 @@ def convert_audio_to_text(input_file_name, output_file, separator=TEXT_SEPERATOR
 
     recognizer = sr.Recognizer()
     
-    print('totalduration: ',total_duration)
     with alive_bar(total_duration) as bar:
         for i in range(0,total_duration):
             with sr.AudioFile(input_file_name) as source:
-                audio = recognizer.record(source, offset=i*CHUNK_SIZE, duration=CHUNK_SIZE)
-            f = open(output_file, "a")
-            transcribed_chunk = recognizer.recognize_google(audio)
-            f.write(transcribed_chunk)
-            f.write(separator)
-            # print(' >>>> ', transcribed_chunk)
+                try:
+                    audio = recognizer.record(source, offset=i*CHUNK_SIZE, duration=CHUNK_SIZE)
+                    f = open(output_file, "a")
+                    transcribed_chunk = recognizer.recognize_google(audio)
+                    f.write(transcribed_chunk)
+                    f.write(separator)
+                except sr.UnknownValueError:
+                    print("[{0}] Google Speech Recognition could not understand audio chunk".format(i))
+                    f.write('------ ')
+                except sr.RequestError as e:
+                    print("[{0}] Could not request results from Google Speech Recognition service; {1}".format(i).format(e))
             bar()
         f.close()
 
 
 def app(args):
     try:
-        input_video_file_name = os.path.join(VIDEO_FILE_DIR, args[1])
+        input_video_file_name = args[1]
         base, ext = os.path.splitext(args[1])
         audio_file_name = os.path.join(AUDIO_FILE_DIR, base + '.wav')
-        output_text_file_name = os.path.join(TEXT_FILE_DIR, args[2])
+        output_text_file_name = args[2]
         print('Paths for processing:')
         print('Input video file: {}'.format(input_video_file_name))
         print('Converted audio file: {}'.format(audio_file_name))
