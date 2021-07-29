@@ -8,6 +8,8 @@ Video-To-Text tool for MetaProvide
 4. Run command `python3 main.py example_video.mp4 example_video_transcribed.txt`
 5. Navigate to `TextOutput` directory and find you transcribed text
 
+# Quick Demo
+![](assets/demo.gif)
 
 # Note
 This script is using Google Speech Recognition Engine in the background.
