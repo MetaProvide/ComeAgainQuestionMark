@@ -47,10 +47,10 @@ def convert_audio_to_text(input_file_name, output_file, separator=TEXT_SEPERATOR
 
 def app(args):
     try:
-        input_video_file_name = args[1]
+        input_video_file_name = os.path.join(VIDEO_FILE_DIR, args[1])
         base, ext = os.path.splitext(args[1])
         audio_file_name = os.path.join(AUDIO_FILE_DIR, base + '.wav')
-        output_text_file_name = args[2]
+        output_text_file_name = os.path.join(TEXT_FILE_DIR, args[2])
         print('Paths for processing:')
         print('Input video file: {}'.format(input_video_file_name))
         print('Converted audio file: {}'.format(audio_file_name))
