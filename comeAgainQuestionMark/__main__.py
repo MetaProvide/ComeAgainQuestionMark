@@ -2,12 +2,13 @@
 import sys, os
 import wave, math, contextlib
 import speech_recognition as sr
+from pathlib import Path
 from alive_progress import alive_bar
 from moviepy.editor import AudioFileClip
 
-VIDEO_FILE_DIR = "VideoInput"
-TEXT_FILE_DIR = "TextOutput"
-AUDIO_FILE_DIR = "ConvertedAudio"
+PROJ_ROOT_DIR = Path(__file__).parent.parent
+ASSETS_PATH = os.path.join(PROJ_ROOT_DIR, 'assets')
+AUDIO_PATH = os.path.join(ASSETS_PATH, 'audio')
 CHUNK_SIZE = 10
 TEXT_SEPERATOR = "\n"
 
@@ -53,10 +54,10 @@ def convert_audio_to_text(input_file_name, output_file, separator=TEXT_SEPERATOR
 
 def app(args):
     try:
-        input_video_file_name = os.path.join(VIDEO_FILE_DIR, args[1])
-        base, ext = os.path.splitext(args[1])
-        audio_file_name = os.path.join(AUDIO_FILE_DIR, base + '.wav')
-        output_text_file_name = os.path.join(TEXT_FILE_DIR, args[2])
+        input_video_file_name = os.path.join(args[1])
+        base, _ = os.path.splitext(os.path.basename(args[1]))
+        audio_file_name = os.path.join(AUDIO_PATH, base + '.wav')
+        output_text_file_name = os.path.join(args[2])
         print('Paths for processing:')
         print('Input video file: {}'.format(input_video_file_name))
         print('Converted audio file: {}'.format(audio_file_name))
@@ -79,3 +80,4 @@ def app(args):
 if __name__ == "__main__":
     app(sys.argv)
     
+
