@@ -3,7 +3,7 @@ name = "comeagainquestionmark"
 version = "0.1.0"
 description = "Transcription tool for video to text"
 authors = ["Henry Bergström <henrybergstrom@protonmail.com>"]
-license = "AGPL-3.0-or-later"
+license = "GPL-3.0-or-later"
 
 [tool.poetry.dependencies]
 python = "^3.8"
