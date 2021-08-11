@@ -3,7 +3,9 @@ import os
 import wave
 import math
 import contextlib
+import json
 import speech_recognition as sr
+from vosk import Model, KaldiRecognizer, SetLogLevel
 from pathlib import Path
 from alive_progress import alive_bar
 from moviepy.editor import AudioFileClip
@@ -13,6 +15,13 @@ ASSETS_PATH = os.path.join(PROJ_ROOT_DIR, "assets")
 AUDIO_PATH = os.path.join(ASSETS_PATH, "audio")
 CHUNK_SIZE = 10
 TEXT_SEPERATOR = "\n"
+SAMPLE_RATE = 160000
+MODEL_PATH = os.path.join(ASSETS_PATH, "models")
+
+
+if not os.path.exists(MODEL_PATH):
+    print ("Please download the model from https://alphacephei.com/vosk/models and unpack in 'models' in {}.".format(MODEL_PATH))
+    exit (1)
 
 
 def generate_timestamp(seconds):
@@ -31,40 +40,42 @@ def convert_audio_to_text(input_file_name, output_file, separator=TEXT_SEPERATOR
     with contextlib.closing(wave.open(input_file_name, "r")) as f:
         frames = f.getnframes()
         rate = f.getframerate()
-        duration = frames / float(rate)
+        duration = frames // rate
 
-    total_duration = math.ceil(duration / CHUNK_SIZE)
+        total_duration = math.ceil(duration / CHUNK_SIZE)
 
-    recognizer = sr.Recognizer()
+        model = Model(os.path.join(MODEL_PATH, "vosk-model-en-us-daanzu-20200905-lgraph"))
+        recognizer = KaldiRecognizer(model, SAMPLE_RATE)
 
-    with alive_bar(total_duration) as bar:
-        for i in range(0, total_duration):
-            with sr.AudioFile(input_file_name) as source:
-                try:
-                    seconds_passed = i * CHUNK_SIZE
-                    audio = recognizer.record(
-                        source, offset=seconds_passed, duration=CHUNK_SIZE
-                    )
-                    f = open(output_file, "a")
-                    transcribed_chunk = recognizer.recognize_google(audio)
+        with alive_bar(total_duration) as bar:
+            with wave.open(input_file_name, "rb") as source:
+                results = []
+                while True:
+                    data = source.readframes(4000)
+                    if len(data) == 0:
+                        break
+                    if recognizer.AcceptWaveform(data):
+                        results.append(recognizer.Result())
+                    bar()
+
+                results.append(recognizer.FinalResult())
+
+                print(results)
+                
+                for i, res in enumerate(results):
+                    words = json.loads(res).get('text')
+                    if not words:
+                        continue
+                    timestamp = generate_timestamp(words[0]['start'])
+                    content = ' '.join([w['word'] for w in words])
+                    print(
+                      timestamp + ": " + content
+                      )
+
                     f.write(
-                        generate_timestamp(seconds_passed) + ": " + transcribed_chunk
+                      timestamp + ": " + content
                     )
-                    f.write(separator)
-                except sr.UnknownValueError:
-                    print(
-                        "[{0}] Google Speech Recognition could not understand audio chunk".format(
-                            i
-                        )
-                    )
-                    f.write("------ ")
-                except sr.RequestError as e:
-                    print(
-                        "[{0}] Could not request results from Google Speech Recognition service; {1}".format(
-                            i, e
-                        )
-                    )
-            bar()
+
         f.close()
 
 
