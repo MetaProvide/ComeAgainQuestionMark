@@ -3,6 +3,7 @@ import os
 import wave
 import math
 import contextlib
+import argparse
 import json
 import speech_recognition as sr
 from vosk import Model, KaldiRecognizer, SetLogLevel
@@ -42,8 +43,8 @@ def convert_audio_to_text(input_file_name, output_file, separator=TEXT_SEPERATOR
         rate = f.getframerate()
         duration = frames // rate
 
+        # TODO fix bars()
         total_duration = math.ceil(duration / CHUNK_SIZE)
-
         model = Model(os.path.join(MODEL_PATH, "vosk-model-en-us-daanzu-20200905-lgraph"))
         recognizer = KaldiRecognizer(model, SAMPLE_RATE)
 
@@ -55,36 +56,37 @@ def convert_audio_to_text(input_file_name, output_file, separator=TEXT_SEPERATOR
                     if len(data) == 0:
                         break
                     if recognizer.AcceptWaveform(data):
-                        results.append(recognizer.Result())
+                        json_data = recognizer.Result()
+                        text = json.loads(json_data)['text']
+                        results.append(text)
+                        print(results)
                     bar()
 
-                results.append(recognizer.FinalResult())
+                # results.append(recognizer.FinalResult())
 
-                print(results)
-                
-                for i, res in enumerate(results):
-                    words = json.loads(res).get('text')
-                    if not words:
-                        continue
-                    timestamp = generate_timestamp(words[0]['start'])
-                    content = ' '.join([w['word'] for w in words])
-                    print(
-                      timestamp + ": " + content
-                      )
-
-                    f.write(
-                      timestamp + ": " + content
-                    )
-
+                of = open(output_file, "a")
+                for i, line in enumerate(results):
+                    of.write(str(i) + " " + line + '\n') 
+                of.close();
         f.close()
 
 
-def app(args):
+def app():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("-m", "--model", dest = "model_path", default = "model", help="Specify model Path for Vosk. Get model from https://alphacephei.com/vosk.models and specify path")
+    parser.add_argument("-i", "--input", dest = "input_path", help="Specify input video path")
+    parser.add_argument("-o", "--output",dest = "output_path", help="Specify output text path")
+
+    args = parser.parse_args()
+    print("model: {}, input: {}, output: {}".format(args.model_path, args.input_path, args.output_path))
+    
     try:
-        input_video_file_name = os.path.join(args[1])
-        base, _ = os.path.splitext(os.path.basename(args[1]))
+        input_video_file_name = os.path.abspath(args.input_path)
+        base, _ = os.path.splitext(os.path.basename(args.input_path))
         audio_file_name = os.path.join(AUDIO_PATH, base + ".wav")
-        output_text_file_name = os.path.join(args[2])
+        model_file_name = os.path.abspath(args.model_path)
+        output_text_file_name = os.path.join(args.output_path)
         print("Paths for processing:")
         print("Input video file: {}".format(input_video_file_name))
         print("Converted audio file: {}".format(audio_file_name))
@@ -96,7 +98,7 @@ def app(args):
         print("DONE: convert video to audio\n")
 
         print("START: convert audio to text")
-        convert_audio_to_text(audio_file_name, output_text_file_name)
+        convert_audio_to_text(audio_file_name, output_text_file_name, model_file_name)
         print("DONE: convert audio to text.")
         print("Output file is located at: {}".format(output_text_file_name))
 

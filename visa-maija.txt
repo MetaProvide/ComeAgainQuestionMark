@@ -1,0 +1,31 @@
+[00:00:00]: I know we all want to get started diving into these sections where we learn about the different pain points and they are
+[00:00:10]: remedies however you still have to be patient because writing clean code takes time it's written over time and of course
+[00:00:20]: you want to write your best CO2 right from the beginning you're starting a new project and especially after taking this course you probably want to ride the clutch
+[00:00:30]: possible right from the start the things you will notice that you will always find ways of improving your code over time you will never
+[00:00:40]: write the best possible code right at the start although the cause your project of course typically evolves over time you don't have a project which
+[00:00:50]: write once and where you then never need to go back to your code you might need to fix bucks you might need to add new features
+[00:01:00]: doing that you will change your coat and you might be able to improve your code so always question your existing code and
+[00:01:10]: improve-it refactor a lot because refactoring is Yorkie friend when it comes to writing clean code because
+[00:01:20]: you write clean code you typically start on a project you plan your project of course the data entities you wanted you was into on but then when you started writing
+[00:01:30]: you implement feature by feature but often you will then find a way of improving the feature you just worked on and hence you refactor it
+[00:01:40]: then you continued and you find a way of improving that lost feature you worked on and this is a totally normal flow even once you're done with your
+[00:01:50]: type or your release candidate you should review your code and then of course also again improve it where possible so right and clean
+[00:02:00]: is an iterative process and you're never done with it you will always find ways of improving code or as we had more features you might need to check
+[00:02:10]: because it doesn't work with that new feature otherwise so you should embrace refactoring and I know from offer courses that refract
+[00:02:20]: can be frustrating I had asked you in Surrey complained about the fact that we did refactoring mycourses the thing just is refactoring
+[00:02:30]: is a totally normal thing to do during development because you save time tomorrow if you refactor today if you continuously
+[00:02:40]: roof and question your code you will have batter code tomorrow which will speed you up tomorrow in addition account-based can really only sir
+[00:02:50]: life and stay maintainable if you continuously question and approve and refactor it otherwise it will not age well as
+[00:03:00]: Pro tip always try to improve the code whenever you change something in there even if you change something else try to find a place in your coat
+[00:03:10]: where you can improve a code maybe improve a function with all the tools are going to learn from this course because this will ensure that your codebase
+[00:03:20]: always healthy because there is a big danger I'm of course aware that were all always Under Pressure there never is time to do it right
+[00:03:30]: you just have to do it in some way and therefore we are inclined to write quick code instead of good and clean code however considered this Excel
+[00:03:40]: made a plot which is not too unrealistic if we plot the amount of code output so the code we write the new features we add
+[00:03:50]: project against the time for which our project exists in weeks or months or even years if we only ride dirt
+[00:04:00]: decode and we just ride code which works but which isn't really clean will be able to pump out a lot of code and features initially but over
+[00:04:10]: I'm dead will decline because our codebase becomes a burden and it becomes hard to maintain and adding new features and fixing bucks becomes harder
+[00:04:20]: time and this is not some unrealistic made-up scenario there are lots of projects out there which have to be Rewritten from scratch at some point of time
+[00:04:30]: because they became unmaintainable simply because they were not using clean code if you are using clean code on the other hand you are slower
+[00:04:40]: but over time you become more productive because adding you features is very easy new future and you profit and benefit from your clean code
+[00:04:50]: so that's why writing clean code is key and important and why it should be a priority in any project you are going to start
+------ 
