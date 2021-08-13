@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "comeagainquestionmark"
-version = "0.1.0"
+version = "0.1.1"
 description = "Transcription tool for video to text"
 authors = ["Henry Bergström <henrybergstrom@protonmail.com>"]
 license = "GPL-3.0-or-later"
@@ -10,6 +10,7 @@ python = "^3.8"
 SpeechRecognition = "^3.8.1"
 alive-progress = "^1.6.2"
 moviepy = "^1.0.3"
+vosk = "^0.3.30"
 
 [tool.poetry.dev-dependencies]
 black = "^21.7b0"
