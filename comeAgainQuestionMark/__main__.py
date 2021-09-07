@@ -1,5 +1,3 @@
-import main
+from comeAgainQuestionMark.main import app
 
-main.app()
-    
-
+app()
