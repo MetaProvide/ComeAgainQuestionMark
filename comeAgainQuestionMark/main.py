@@ -41,11 +41,7 @@ def generate_timestamp(seconds):
     return "[{:02d}:{:02d}:{:02d}]".format(hour, minute, sec)
 
 def transcribe(input_file_name, output_file, model_path, separator=TEXT_SEPERATOR):
-    # process = subprocess.Popen(['ffmpeg', '-loglevel', 'quiet', '-i',
-                            # input_file_name,
-                            # '-ar', str(SAMPLE_RATE) , '-ac', '1', '-f', 's16le', '-'],
-                            # stdout=subprocess.PIPE)
-
+        print("This is not corrently indented")
     process = get_data_from(input_file_name)
 
     model = Model(model_path)
