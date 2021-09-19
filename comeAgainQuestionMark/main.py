@@ -62,7 +62,12 @@ def get_data_from(input_file_name):
 
 
 def transcribe(
-    input_file_name, output_file, model_path, enable_timestamp, timestamp_format
+    input_file_name,
+    output_file,
+    model_path,
+    enable_timestamp,
+    num_words,
+    timestamp_format,
 ):
     process = get_data_from(input_file_name)
     model = Model(model_path)
@@ -97,8 +102,8 @@ def transcribe(
             if "result" not in jres:
                 continue
             words = jres["result"]
-            for j in range(0, len(words), WORDS_PER_LINE):
-                line = words[j : j + WORDS_PER_LINE]
+            for j in range(0, len(words), num_words):
+                line = words[j : j + num_words]
                 s = srt.Subtitle(
                     index=len(subs),
                     content=" ".join([ln["word"] for ln in line]),
@@ -107,10 +112,14 @@ def transcribe(
                 )
                 subs.append(s)
 
-    print("Saving file...")
-    of = open(output_file, "a")
-    of.write(parse_subs(subs, enable_timestamp, timestamp_format) + "\n")
-    of.close()
+    transcription = parse_subs(subs, enable_timestamp, timestamp_format) + "\n"
+    if output_file:
+        print("Saving file...")
+        of = open(output_file, "a")
+        of.write(transcription)
+        of.close()
+    else:
+        return transcription
 
 
 def generate_timestamp(seconds):
@@ -144,10 +153,14 @@ def setup_arguments():
         help="Specify model Path for Vosk. Get model from https://alphacephei.com/vosk.models and specify path",
     )
     parser.add_argument(
-        "-i", "--input", dest="input_path", help="Specify input video path"
+        "-i", "--input", dest="input_path", help="Specify input video/audio path"
     )
     parser.add_argument(
-        "-o", "--output", dest="output_path", help="Specify output text path"
+        "-o",
+        "--output",
+        dest="output_path",
+        default="",
+        help="Specify output text path",
     )
     parser.add_argument(
         "-t",
@@ -155,6 +168,13 @@ def setup_arguments():
         dest="enable_timestamp",
         default=True,
         help="Enable timetamping [True|False] (default: True)",
+    )
+    parser.add_argument(
+        "-n",
+        "--nwords",
+        dest="num_words",
+        default=7,
+        help="Specify number of words per line in output file",
     )
     parser.add_argument(
         "-f",
@@ -173,7 +193,6 @@ def validate_paths(args):
         print("Please specify valid input file path")
         isValid = False
 
-    if not os.path.exists(args.output_path):
         print("Please specify valid output file path")
         isValid = False
 
@@ -181,6 +200,10 @@ def validate_paths(args):
         print(
             "Please download the model from https://alphacephei.com/vosk/models, unzip and specify it [-m | --model path/to/model ]"
         )
+        isValid = False
+
+    if int(args.num_words) < 0 or int(args.num_words) > 30:
+        print("Please specify valid num_words [-n|--nwords] range (1-30)")
         isValid = False
 
     return isValid
@@ -193,11 +216,12 @@ def app():
         exit(1)
 
     print(
-        "Model: {}\nInput: {}\nOutput: {}\nEnable Timestamp: {}\nFormat: {}".format(
+        "Model: {}\nInput: {}\nOutput: {}\nEnable Timestamp: {}\nNumber of words: {}\nFormat: {}".format(
             args.model_path,
             args.input_path,
             args.output_path,
             args.enable_timestamp,
+            args.num_words,
             args.output_format,
         )
     )
@@ -207,15 +231,34 @@ def app():
         base, _ = os.path.splitext(os.path.basename(args.input_path))
         model_file_name = os.path.abspath(args.model_path)
         output_text_file_name = os.path.join(args.output_path)
+        if not args.output_path == "":
+            output_text_file_name = os.path.join(args.output_path)
+        else:
+            output_text_file_name = None
+        num_words = int(args.num_words)
+        enable_timestamp = args.enable_timestamp.lower() in [
+            "true",
+            "1",
+            "t",
+            "y",
+            "yes",
+            "yeah",
+        ]
         print("Transcribing input to text")
-        transcribe(
-            input_file_name,
-            output_text_file_name,
-            model_file_name,
-            args.enable_timestamp,
-            args.output_format,
+        print(
+            transcribe(
+                input_file_name,
+                output_text_file_name,
+                model_file_name,
+                enable_timestamp,
+                num_words,
+                args.output_format,
+            )
         )
-        print("\nDone - Output file is located at: {}".format(output_text_file_name))
+        if output_text_file_name:
+            print(
+                "\nDone - Output file is located at: {}".format(output_text_file_name)
+            )
 
     except (IndexError, RuntimeError, TypeError, NameError) as err:
         print("ERROR: ", err)
