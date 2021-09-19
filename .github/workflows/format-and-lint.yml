@@ -21,6 +21,9 @@ jobs:
       shell: bash
       run: 
         python3 -m poetry config virtualenvs.in-project true
+    - name: Install dependencies
+      run: |
+        python3 -m poetry install
     - name: Formatting the code with black
       run: |
         find . | grep -E ".+.py$" | xargs python3 -m poetry run black --exclude .venv
