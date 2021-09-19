@@ -1,6 +1,7 @@
 assets/
 test*
 .DS_Store
+.vim/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
