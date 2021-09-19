@@ -7,10 +7,9 @@ license = "GPL-3.0-or-later"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-SpeechRecognition = "^3.8.1"
-alive-progress = "^1.6.2"
-moviepy = "^1.0.3"
 vosk = "^0.3.30"
+progressbar2 = "^3.53.3"
+srt = "^3.5.0"
 
 [tool.poetry.dev-dependencies]
 black = "^21.7b0"
