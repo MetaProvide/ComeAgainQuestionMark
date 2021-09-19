@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "comeagainquestionmark"
 version = "0.1.2"
-description = "Transcription tool for video to text"
+description = "Transcription tool for video or audio to text"
 authors = ["Henry Bergström <henrybergstrom@protonmail.com>"]
 license = "GPL-3.0-or-later"
 
