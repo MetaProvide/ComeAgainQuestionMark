@@ -132,7 +132,7 @@ def generate_timestamp(seconds):
 def parse_subs(subs, enable_timestamp, timestamp_format):
     if timestamp_format == "srt":
         return srt.compose(subs)
-    elif enable_timestamp and timestamp_format == "raw":
+    elif enable_timestamp and timestamp_format == "txt":
         return "".join(
             [
                 "{}: {}\n".format(generate_timestamp(ln.start.seconds), ln.content)
@@ -180,8 +180,8 @@ def setup_arguments():
         "-f",
         "--format",
         dest="output_format",
-        default="raw",
-        help="Timetamp format: [raw|srt] (default: raw)",
+        default="txt",
+        help="Timetamp format: [txt|srt] (default: txt)",
     )
 
     return parser
