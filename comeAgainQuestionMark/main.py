@@ -91,33 +91,32 @@ def transcribe(
                 results.append(recognizer.Result())
         results.append(recognizer.FinalResult())
 
-    print("Format transcription...")
+    print("Format transcription...", end="")
     progress_count = 0
     progress_total = len(results)
-    with progressbar.ProgressBar(widgets=progress_widgets, max_value=10) as bar:
-        for i, res in enumerate(results):
-            progress_count += 1
-            bar.update(progress_count / progress_total)
-            jres = json.loads(res)
-            if "result" not in jres:
-                continue
-            words = jres["result"]
-            for j in range(0, len(words), num_words):
-                line = words[j : j + num_words]
-                s = srt.Subtitle(
-                    index=len(subs),
-                    content=" ".join([ln["word"] for ln in line]),
-                    start=datetime.timedelta(seconds=line[0]["start"]),
-                    end=datetime.timedelta(seconds=line[-1]["end"]),
-                )
-                subs.append(s)
+    for i, res in enumerate(results):
+        jres = json.loads(res)
+        if "result" not in jres:
+            continue
+        words = jres["result"]
+        for j in range(0, len(words), num_words):
+            line = words[j : j + num_words]
+            s = srt.Subtitle(
+                index=len(subs),
+                content=" ".join([ln["word"] for ln in line]),
+                start=datetime.timedelta(seconds=line[0]["start"]),
+                end=datetime.timedelta(seconds=line[-1]["end"]),
+            )
+            subs.append(s)
+    print("Done.")
 
     transcription = parse_subs(subs, enable_timestamp, timestamp_format) + "\n"
     if output_file:
-        print("Saving file...")
+        print("Saving file...", end="")
         of = open(output_file, "a")
         of.write(transcription)
         of.close()
+        print("Done.")
     else:
         return transcription
 
