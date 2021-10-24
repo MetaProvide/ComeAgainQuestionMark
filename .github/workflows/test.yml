@@ -1,4 +1,4 @@
-name: Tests
+name: pytest
 
 on: [push, pull_request]
 env: 
@@ -18,9 +18,12 @@ jobs:
       uses: abatilo/actions-poetry@v2.1.0
       with:
         poetry-version: 1.1.7
-    - name: Install dependencies
+    - name: Install ffmpeg
+      run: |
+        sudo apt install ffmpeg
+    - name: Install python dependencies
       run: |
         python3 -m poetry install
-    - name: Rn tests
+    - name: Run tests
       run: |
-        pytest .
+        pytest -s .
