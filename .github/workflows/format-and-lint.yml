@@ -28,8 +28,8 @@ jobs:
         python3 -m poetry install
     - name: Formatting the code with black
       run: |
-        black --check comeAgainQuestionMark/
+        black --check come-again-question-mark/
     - name: Lint the code with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
-        flake8 comeAgainQuestionMark/ --show-source --statistics
+        flake8 come-again-question-mark/ --show-source --statistics
