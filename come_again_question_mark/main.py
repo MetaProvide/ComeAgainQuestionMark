@@ -165,8 +165,8 @@ def setup_arguments():
         "-t",
         "--timestamped",
         dest="enable_timestamp",
-        default=True,
-        help="Enable timetamping [True|False] (default: True)",
+        default="yes",
+        help="Enable timetamping ['true'|'false'] (default: 'true')",
     )
     parser.add_argument(
         "-n",

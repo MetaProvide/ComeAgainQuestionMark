@@ -1,5 +1,5 @@
-# ComeAgainQuestionMark
-Video-To-Text tool for MetaProvide
+# Come Again?
+Video-To-Text tool for MetaProvide. Useful when you want to read what was said in a video (or audio clip)
 
 ## Requirements
 - Python3

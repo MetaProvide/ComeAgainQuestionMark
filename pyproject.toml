@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "come-again-question-mark"
-version = "0.1.6"
+version = "0.1.7"
 description = "Transcription tool for video or audio to text"
 authors = ["Henry Bergström <henrybergstrom@protonmail.com>"]
 license = "GPL-3.0-or-later"
