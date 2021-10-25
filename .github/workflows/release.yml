@@ -8,7 +8,6 @@ env:
 
 jobs:
   release:
-    needs: test
     runs-on: ubuntu-latest
     name: Release new version
     steps:
