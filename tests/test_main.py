@@ -1,5 +1,5 @@
 #!/bin/python3
-from comeAgainQuestionMark.main import transcribe
+from come_again_question_mark.main import transcribe
 from zipfile import ZipFile
 from urllib.request import urlretrieve
 import os

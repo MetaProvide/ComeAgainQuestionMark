@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "comeagainquestionmark"
+name = "come-again-question-mark"
 version = "0.1.4"
 description = "Transcription tool for video or audio to text"
 authors = ["Henry Bergström <henrybergstrom@protonmail.com>"]
@@ -22,7 +22,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.semantic_release]
 version_variable = [
-    "comeAgainQuestionMark/__init__.py:__version__",
+    "come_again_question_mark/__init__.py:__version__",
     "pyproject.toml:version"
 ]
 branch = "main"
