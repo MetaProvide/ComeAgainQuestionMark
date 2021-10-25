@@ -1,6 +1,11 @@
 name: test
 
-on: [push, pull_request]
+on: 
+  push:
+    branches:
+    - '**'
+  pull_request:
+
 env: 
   POETRY_VIRTUALENVS_CREATE: "false"
 jobs:
